@@ -69,8 +69,9 @@ namespace TesserNet.Internal
         /// Performs the OCR.
         /// </summary>
         /// <param name="handle">The API base handle.</param>
-        /// <returns>The found text on the image as a UTF8 string.</returns>
-        public abstract string TessBaseAPIGetUTF8Text(IntPtr handle);
+        /// <param name="format">Type of format to return the string as.</param>
+        /// <returns>The found text on the image as a string of the specified format.</returns>
+        public abstract string TessBaseGetText(IntPtr handle, TesseractTextOutputFormat format);
 
         /// <summary>
         /// Sets the source resolution.

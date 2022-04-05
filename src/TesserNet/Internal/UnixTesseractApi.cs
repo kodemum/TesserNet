@@ -18,8 +18,22 @@ namespace TesserNet.Internal
             => NativeMethods.TessBaseAPIDelete(handle);
 
         /// <inheritdoc/>
-        public override string TessBaseAPIGetUTF8Text(IntPtr handle)
-            => NativeMethods.TessBaseAPIGetUTF8Text(handle).ToUtf8String();
+        public override string TessBaseGetText(IntPtr handle, TesseractTextOutputFormat format)
+        {
+            var result = format switch
+            {
+                TesseractTextOutputFormat.PlainText => NativeMethods.TessBaseAPIGetUTF8Text(handle),
+                TesseractTextOutputFormat.HOCR => NativeMethods.TessBaseAPIGetHOCRText(handle, 0),
+                TesseractTextOutputFormat.Alto => NativeMethods.TessBaseAPIGetAltoText(handle, 0),
+                TesseractTextOutputFormat.Tsv => NativeMethods.TessBaseAPIGetTsvText(handle, 0),
+                TesseractTextOutputFormat.BoxText => NativeMethods.TessBaseAPIGetBoxText(handle, 0),
+                TesseractTextOutputFormat.LTSMBoxText => NativeMethods.TessBaseAPIGetLSTMBoxText(handle, 0),
+                TesseractTextOutputFormat.UNLVText => NativeMethods.TessBaseAPIGetUNLVText(handle),
+                TesseractTextOutputFormat.WordStrBoxText => NativeMethods.TessBaseAPIGetWordStrBoxText(handle, 0),
+                _ => throw new ArgumentException($"Unknown output format {format}"),
+            };
+            return result.ToUtf8String();
+        }
 
         /// <inheritdoc/>
         public override int TessBaseAPIInit1(IntPtr handle, string dataPath, string language, int oem, IntPtr configs, int configSize)
@@ -74,6 +88,27 @@ namespace TesserNet.Internal
 
             [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
             public static extern IntPtr TessBaseAPIGetUTF8Text(IntPtr handle);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetHOCRText(IntPtr handle, int page_number);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetAltoText(IntPtr handle, int page_number);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetTsvText(IntPtr handle, int page_number);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetBoxText(IntPtr handle, int page_number);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetLSTMBoxText(IntPtr handle, int page_number);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetUNLVText(IntPtr handle);
+
+            [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
+            public static extern IntPtr TessBaseAPIGetWordStrBoxText(IntPtr handle, int page_number);
 
             [DllImport(DllPath, CharSet = CharSet.Auto, SetLastError = true)]
             public static extern void TessBaseAPISetSourceResolution(IntPtr handle, int ppi);

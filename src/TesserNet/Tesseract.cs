@@ -120,7 +120,7 @@ namespace TesserNet
                 string result;
                 try
                 {
-                    result = api.TessBaseAPIGetUTF8Text(handle);
+                    result = api.TessBaseGetText(handle, Options.OutputFormat);
                 }
                 catch
                 {

@@ -49,6 +49,11 @@ namespace TesserNet
         public bool Numeric { get; set; }
 
         /// <summary>
+        /// Gets or sets the output format to use for strings returned from Tesseract.
+        /// </summary>
+        public TesseractTextOutputFormat OutputFormat { get; set; }
+
+        /// <summary>
         /// Gets or sets the configuration name or path.
         /// </summary>
         public string Config { get; set; } = string.Empty;

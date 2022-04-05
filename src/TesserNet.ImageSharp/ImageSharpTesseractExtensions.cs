@@ -85,12 +85,15 @@ namespace TesserNet
             byte[] bytes = new byte[bmp.Width * bmp.Height * 4];
             int index = 0;
 
-            for (int y = 0; y < bmp.Height; y++)
+            bmp.ProcessPixelRows(pixelAccessor =>
             {
-                byte[] row = MemoryMarshal.AsBytes(bmp.GetPixelRowSpan(y)).ToArray();
-                Array.Copy(row, 0, bytes, index, row.Length);
-                index += row.Length;
-            }
+                for (int y = 0; y < pixelAccessor.Height; y++)
+                {
+                    byte[] row = MemoryMarshal.AsBytes(pixelAccessor.GetRowSpan(y)).ToArray();
+                    Array.Copy(row, 0, bytes, index, row.Length);
+                    index += row.Length;
+                }
+            });
 
             if (bmp != image)
             {
